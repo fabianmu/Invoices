@@ -1,0 +1,23 @@
+{
+    "name": "eavio/invoices",
+    "description": "A Laravel PDF Invoices Generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "eAvio",
+            "email": "dev@eavio.aero"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": "^5.0|^6.0",
+        "illuminate/view": "^5.0|^6.0",
+        "nesbot/carbon": ">1.22",
+        "dompdf/dompdf": "^0.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "eavio\\invoices\\": "src/"
+        }
+    }
+}
