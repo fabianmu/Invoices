@@ -316,6 +316,13 @@ class Invoice
             return ($item['price'] * $item['ammount']) + $this->vatPrice(bcmul($item['price'], $item['ammount'], $this->decimals), $item['vat']);
         });
     }
+	
+	public function noVatPrice()
+    {
+        return $this->items->sum(function ($item) {
+            return ($item['price'] * $item['ammount']);
+        });
+    }
 
     /**
      * Return formatted sub total price.
