@@ -1,12 +1,6 @@
 <?php
-/**
-  * This file is part of consoletvs/invoices.
-  *
-  * (c) Erik Campobadal <soc@erik.cat>
-  *
-  * For the full copyright and license information, please view the LICENSE
-  * file that was distributed with this source code.
-  */
+
+//This file is part of eavio/invoices.
 
 namespace eavio\invoices\Classes;
 
@@ -15,30 +9,18 @@ use eavio\invoices\Traits\Setters;
 use Illuminate\Support\Collection;
 use Storage;
 
-/**
- * This is the Invoice class.
- *
- * @author Erik Campobadal <soc@erik.cat>
- */
+
+//This is the Invoice class.
 class Invoice
 {
     use Setters;
-	
-	public function discountPrice(){
-		return $this->subTotalPrice() * ((100-$this->discount) / 100);
-	}
-	
-	public function discountPriceFormatted(){
-		return number_format($this->subTotalPrice() - $this->discountPrice(), $this->decimals);
-	}
-	
-	public function vatPrice($price, $percentage){
-		return ($percentage/100) * $price;
-	}
-	
-	public $vats = Array();
-	
-	public $discount;
+
+    /**
+     * Invoice discount.
+     *
+     * @var int
+     */
+	public $discount = null;
     /**
      * Invoice name.
      *
@@ -164,7 +146,7 @@ class Invoice
      * @var Dompdf\Dompdf
      */
     private $pdf;
-	
+
     /**
      * Create a new invoice instance.
      *
@@ -172,7 +154,6 @@ class Invoice
      *
      * @param string $name
      */
-	 
     public function __construct($name = 'Invoice')
     {
         $this->name = $name;
@@ -204,7 +185,7 @@ class Invoice
      *
      * @param string $name
      *
-     * @return ConsoleTVs\Invoices\Classes\Invoice
+     * @return eAvio\Invoices\Classes\Invoice
      */
     public static function make($name = 'Invoice')
     {
@@ -234,12 +215,16 @@ class Invoice
      *
      * @param string $name
      * @param int    $price
+     * @param string $unit
      * @param int    $ammount
+     * @param int    $vat
+     * @param float  $totalPrice
      * @param string $id
      * @param string $imageUrl
      *
      * @return self
      */
+
     public function addItem($name, $price, $unit, $ammount = 1, $vat, $id = '-', $imageUrl = null)
     {
         $this->items->push(Collection::make([
@@ -252,12 +237,14 @@ class Invoice
             'id'         => $id,
             'imageUrl'   => $imageUrl,
         ]));
-		
+
+         // Saves the vats (without duplicates) into an array with the vat percentage if the vat percentage is not a duplicate
 		if(!in_array($vat, $this->vats[0]) and $vat != 0){
 			array_push($this->vats[0], $vat);
 			array_push($this->vats[1], $this->vatPrice($price * $ammount, $vat));
 		}
-		
+
+         // Else if the vat isn't 0, finds the index of the vat percentage and adds the value of the current vat into the found index field
 		else if($vat != 0){
 			$key = array_search($vat, $this->vats[0]);
 			$value = $this->vats[1][$key];
@@ -266,14 +253,80 @@ class Invoice
 		}
         return $this;
     }
-	
-	public function getVat($id){
-		return $this->vats[0][$id];
-	}
-	
-	public function getVatValue($number){
-		return number_format($this->vats[1][$number], $this->decimals);
-	}
+
+    /**
+     * Returns the price of the discount based on the total price
+     *
+     * @method discountPrice
+     *
+     * @return float
+     */
+    public function discountPrice(){
+        return $this->subTotalPrice() * (100-$this->discount) / 100;
+    }
+
+    /**
+     * Returns the formatted discount price
+     *
+     * @method discountPriceFormatted
+     *
+     * @return int
+     */
+    public function discountPriceFormatted(){
+        return number_format($this->subTotalPrice() - $this->discountPrice(), $this->decimals);
+    }
+
+    /**
+     * Returns the VAT price
+     *
+     * @method vatPrice
+     *
+     * @return float
+     */
+    public function vatPrice($price, $percentage){
+        return ($percentage/100) * $price;
+    }
+
+    /**
+     * Returns the VAT percentage for the specified index
+     *
+     * @method getVat
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function getVat($id){
+        return $this->vats[0][$id];
+    }
+
+    /**
+     * Returns the VAT value for the specified index
+     *
+     * @method getVatValue
+     *
+     * @param int $id
+     *
+     * @return int
+     */
+    public function getVatValue($id){
+        return number_format($this->vats[1][$id], $this->decimals);
+    }
+
+    /**
+     * Returns the price without VAT and without discount
+     *
+     * @method noVatPrice
+     *
+     * @return float
+     */
+    public function noVatPrice()
+    {
+        return $this->items->sum(function ($item) {
+            return ($item['price'] * $item['ammount']);
+        });
+    }
+
     /**
      * Pop the last invoice item.
      *
@@ -316,13 +369,8 @@ class Invoice
             return ($item['price'] * $item['ammount']) + $this->vatPrice(bcmul($item['price'], $item['ammount'], $this->decimals), $item['vat']);
         });
     }
-	
-	public function noVatPrice()
-    {
-        return $this->items->sum(function ($item) {
-            return ($item['price'] * $item['ammount']);
-        });
-    }
+
+
 
     /**
      * Return formatted sub total price.
@@ -380,11 +428,8 @@ class Invoice
             }
             return $tax_total;
         }
-        
-        return bcdiv(bcmul($tax_rate->tax, $this->subTotalPrice(), $this->decimals), 100, $this->decimals);
-        
 
-        return $tax_rate->tax;
+        return bcdiv(bcmul($tax_rate->tax, $this->subTotalPrice(), $this->decimals), 100, $this->decimals);
     }
 
     /**
@@ -462,8 +507,8 @@ class Invoice
 
     /**
      * Return true/false if one item contains image.
-     * Determine if we should display or not the image column on the invoice.
-     * 
+     * Determine if we should or shouldn't display the image column on the invoice.
+     *
      * @method shouldDisplayImageColumn
      *
      * @return boolean

@@ -1,22 +1,12 @@
 <?php
-/**
-  * This file is part of consoletvs/invoices.
-  *
-  * (c) Erik Campobadal <soc@erik.cat>
-  *
-  * For the full copyright and license information, please view the LICENSE
-  * file that was distributed with this source code.
-  */
+
+// This file is part of eavio/invoices.
 
 namespace eavio\invoices\src;
 
 use Illuminate\Support\ServiceProvider;
 
-/**
- * This is the InvoicesServiceProvider class.
- *
- * @author Erik Campobadal <soc@erik.cat>
- */
+// This is the Invoices class.
 class Invoices extends ServiceProvider
 {
     /**

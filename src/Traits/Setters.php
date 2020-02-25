@@ -20,42 +20,66 @@ use Illuminate\Support\Collection;
  */
 trait Setters
 {
+	/**
+     * Set the invoice discount.
+     *
+     * @method discount
+     *
+     * @param int $discount
+     *
+     * @return self
+     */
 	public function discount($discount){
 		$this->discount = $discount;
-		
+
 		return $this;
 	}
-	
-	public function discount_price($discount_price){
-		$this->discount = $discount;
-		
-		return $this;
-	}
-	
+
+	/**
+	 * Set the invoice footer logo.
+	 *
+	 * @method footer_logo
+	 *
+	 * @param string $footer_logo
+	 *
+	 * @return self
+	 */
 	public function footer_logo($footer_logo){
 		$this->footer_logo = $footer_logo;
-		
+
 		return $this;
 	}
-	
+
+	/**
+	 * Set the invoice date of service.
+	 *
+	 * @method date_of_service
+	 *
+	 * @param Carbon $date_of_service
+	 *
+	 * @return self
+	 */
 	public function date_of_service($date_of_service){
 		$this->date_of_service = $date_of_service;
-		
+
 		return $this;
 	}
-	
+
+	/**
+	 * Set the invoice tax number.
+	 *
+	 * @method tax_number
+	 *
+	 * @param string $tax_number
+	 *
+	 * @return self
+	 */
 	public function tax_number($tax_number){
 		$this->tax_number = $tax_number;
-		
+
 		return $this;
 	}
-	
-	public function tax_rates($details){
-		$this->tax_rates = Collection::make($details);
-		
-		return $this;
-	}
-	
+
     /**
      * Set the invoice name.
      *
@@ -262,5 +286,5 @@ trait Setters
     }
 
 
-    
+
 }

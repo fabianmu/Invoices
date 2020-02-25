@@ -1,12 +1,6 @@
 <?php
-/**
-  * This file is part of consoletvs/invoices.
-  *
-  * (c) Erik Campobadal <soc@erik.cat>
-  *
-  * For the full copyright and license information, please view the LICENSE
-  * file that was distributed with this source code.
-  */
+
+//This file is part of eavio/invoices.
 
 namespace eavio\invoices\Classes;
 
@@ -14,11 +8,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\View;
 
-/**
- * This is the PDF class.
- *
- * @author Erik Campobadal <soc@erik.cat>
- */
+//This is the PDF class.
 class PDF
 {
     /**
@@ -26,8 +16,8 @@ class PDF
      *
      * @method generate
      *
-     * @param ConsoleTVs\Invoices\Classes\Invoice $invoice
-     * @param string                              $template
+     * @param Eavio\Invoices\Classes\Invoice  $invoice
+     * @param string                          $template
      *
      * @return Dompdf\Dompdf
      */

@@ -1,13 +1,16 @@
 <?php
 
 return [
+	/*
+	|--------------------------------------------------------------------------
+	| Default Tax Number
+	|--------------------------------------------------------------------------
+	|
+	| This value is the default currency that is going to be used in invoices.
+	| You can change it on each invoice individually.
+	*/
+	'tax_number' => '12345678',
 
-	'date_of_service_' => date('Y/m/d'),
-	
-	'footer_logo' => '',
-	
-	'tax_number' => '60113928',
-	
     /*
     |--------------------------------------------------------------------------
     | Default Currency
@@ -30,7 +33,6 @@ return [
 
    'decimals' => 2,
 
-   
    /*
    |--------------------------------------------------------------------------
    | Default Invoice Logo
@@ -40,7 +42,18 @@ return [
    | You can change it on each invoice individually.
    */
 
-  'logo' => 'http://i.imgur.com/t9G3rFM.png',
+  'logo' => 'https://process.arts.ac.uk/sites/default/files/online_-id_ban_large-820_x_150.jpg',
+
+  /*
+  |--------------------------------------------------------------------------
+  | Default Invoice Footer Logo
+  |--------------------------------------------------------------------------
+  |
+  | This value is the default invoice Footer logo that is going to be used in invoices.
+  | You can change it on each invoice individually.
+  */
+
+  'footer_logo' => 'https://www.poutskincare.co.za/wp-content/uploads/2016/07/POUT_Background-900x100.png',
 
   /*
   |--------------------------------------------------------------------------
@@ -51,7 +64,7 @@ return [
   | You can change it on each invoice individually.
   */
 
- 'logo_height' => 120,
+ 'logo_height' => 150,
 
   /*
   |--------------------------------------------------------------------------
@@ -102,7 +115,7 @@ return [
         'tax_type'  => 'percentage',
     ],
   ],
-  
+
   /*
   | Default Invoice Due Date
   |--------------------------------------------------------------------------
@@ -129,6 +142,6 @@ return [
   | This value is the default header parameter.
   | If true header will be duplicated on each page.
   */
-  'duplicate_header' => false,
-  
+  'duplicate_header' => true,
+
 ];
